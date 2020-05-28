@@ -9,9 +9,9 @@ jan = Node("Jan", parent=dan)
 joe = Node("Joe", parent=dan)
 
 print(udo)
-Node('/Udo')
+# Node('/Udo')
 print(joe)
-Node('/Udo/Dan/Joe')
+# Node('/Udo/Dan/Joe')
 
 for pre, fill, node in RenderTree(udo):
     print("%s%s" % (pre, node.name))
