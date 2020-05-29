@@ -42,7 +42,7 @@ _Your_ **Pages** site will use the layout and styles from the Jekyll theme you h
 # ppp
 
 
-```javascript
+```python
 function fancyAlert(arg) {
   if(arg) {
     $.facebox({div:'#foo'})
