@@ -1,4 +1,4 @@
-from anytree import Node, RenderTree
+from anytree import Node, RenderTree, NodeMixin
 
 udo = Node("Udo")
 marc = Node("Marc", parent=udo)
@@ -26,14 +26,26 @@ for pre, fill, node in RenderTree(udo):
 print(dan.children)
 # (Node('/Udo/Dan/Jet'), Node('/Udo/Dan/Jan'), Node('/Udo/Dan/Joe'))
 
+
 class MyBaseClass(object):  # Just an example of a base class
    foo = 4
-class MyClass(MyBaseClass, NodeMixin):  # Add Node feature
-    def __init__(self, name, length, width, parent=None, children=None):
-       super(MyClass, self).__init__()
-       self.name = name
-       self.length = length
-     self.width = width
-         self.parent = parent
-         if children:  # set children only if given
-            self.children = children
+
+class MyTree(RenderTree):
+    def __init__(self, root):
+        self.root = root
+        root.parent.parent = root
+
+    class MyNode(Node):  # Add Node feature
+        def __init__(self, name, length, x, y, parent=None, children=None):
+           super(Node, self).__init__() #! super(MyNode)
+           self.name = name
+           self.length = length
+           self.x = x
+           self.y = y
+           self.parent = parent
+           if children:  # set children only if given
+              self.children = children
+
+    def fill_length(self):
+        self.root.length = 0
+        for
