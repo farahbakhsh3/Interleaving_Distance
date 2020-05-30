@@ -37,7 +37,7 @@ class MyTree(RenderTree):
         root.parent.parent = root
 
     class MyNode(Node):  # Add Node feature
-        def __init__(self, name, length, x, y, parent=None, children=None):
+        def __init__(self, name, x, y, length=0, parent=None, children=None):
            super(Node, self).__init__() #! super(MyNode)
            self.name = name
            self.length = length
@@ -48,6 +48,7 @@ class MyTree(RenderTree):
               self.children = children
 
     def fill_length(self):
+        self.root.length = 0
         self.fill_length_inside(self.root)
 
     def fill_length_inside(self, node):
