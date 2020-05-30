@@ -44,7 +44,7 @@ class MyTree(RenderTree):
            self.x = x
            self.y = y
            self.parent = parent
-           if children:  # set children only if given
+           if children:
               self.children = children
 
     def fill_length(self):
