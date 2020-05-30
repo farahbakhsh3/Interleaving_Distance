@@ -1,4 +1,5 @@
 from anytree import Node, RenderTree, NodeMixin
+import math
 
 udo = Node("Udo")
 marc = Node("Marc", parent=udo)
@@ -28,7 +29,7 @@ print(dan.children)
 
 
 class MyBaseClass(object):  # Just an example of a base class
-   foo = 4
+    foo = 4
 
 class MyTree(RenderTree):
     def __init__(self, root):
@@ -47,5 +48,10 @@ class MyTree(RenderTree):
               self.children = children
 
     def fill_length(self):
-        self.root.length = 0
-        for
+        self.fill_length_inside(self.root)
+
+    def fill_length_inside(self, node):
+        for n in node.children:
+            k = math.sqrt(math.pow(n.x-node.x,2) + math.pow(n.y-node.y,2))+ node.length
+            n.length = k
+            self.fill_length_inside(n)
