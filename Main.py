@@ -35,6 +35,7 @@ class MyTree(RenderTree):
     def __init__(self, root):
         self.root = root
         root.parent.parent = root
+        # man yek tree rishe dar ham dashte basham bayad betoonam jaye rishe ro avaz konam. yani har nodi bayad betoone dobare rishe beshe. man entekhab mikonam migam masalan node 4 beshe rishe. 4 ye pedar dare ghablan. khob alan pedaresh bayad beshe bachash bad az inke man 4 o rishe kardam. chon rishe pedar nadare. ine ke migam pedare pedare 4 bayad beshe 4. 
 
     class MyNode(Node):  # Add Node feature
         def __init__(self, name, x, y, length=0, parent=None, children=None):
