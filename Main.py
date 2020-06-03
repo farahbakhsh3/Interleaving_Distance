@@ -8,6 +8,7 @@ dan = Node("Dan", parent=udo)
 jet = Node("Jet", parent=dan)
 jan = Node("Jan", parent=dan)
 joe = Node("Joe", parent=dan)
+us = Node("Us")
 
 print(udo)
 # Node('/Udo')
@@ -28,66 +29,66 @@ print(dan.children)
 # (Node('/Udo/Dan/Jet'), Node('/Udo/Dan/Jan'), Node('/Udo/Dan/Joe'))
 
 
-
-class MyBaseClass(object):  # Just an example of a base class
-    pass
-
-class MyTree(RenderTree):
-    def __init__(self, root):
-        self.root = root
-        root.parent.parent = root
-
-    class MyNode(Node):  # Add Node feature
-        def __init__(self, name, length, x, y, parent=None, children=None):
-           super(Node, self).__init__() #! super(MyNode)
-           self.name = name
-           self.length = length
-           self.x = x
-           self.y = y
-           self.parent = parent
-           if children:
-              self.children = children
-
-    def fill_length(self):
-        self.fill_length_inside(self.root)
-
-    def fill_length_inside(self, node):
-        for n in node.children:
-            k = math.sqrt(math.pow(n.x-node.x,2) + math.pow(n.y-node.y,2))+ node.length
-            n.length = k
-            self.fill_length_inside(n)
-
-
-# class MyTree(RenderTree):
-#     def __init__(self, root):
-#         self.root = root
-#         root.parent.parent = root
-#         # man yek tree rishe dar ham dashte basham bayad betoonam jaye rishe ro avaz konam. yani har nodi bayad betoone dobare rishe beshe. man entekhab mikonam migam masalan node 4 beshe rishe. 4 ye pedar dare ghablan. khob alan pedaresh bayad beshe bachash bad az inke man 4 o rishe kardam. chon rishe pedar nadare. ine ke migam pedare pedare 4 bayad beshe 4. 
-
-#     class MyNode(Node):  # Add Node feature
-#         def __init__(self, name, x, y, length=0, parent=None, children=None):
-#            super(MyNode, self).__init__() #! super(MyNode)
-#            self.name = name
-#            self.length = length
-#            self.x = x
-#            self.y = y
-#            self.parent = parent
-#            if children:
-#               self.children = children
-
-#     def fill_length(self):
-#         self.root.length = 0
-#         self.fill_length_inside(self.root)
-
-#     def fill_length_inside(self, node):
-#         for n in node.children:
-#             k = math.sqrt(math.pow(n.x-node.x,2) + math.pow(n.y-node.y,2))+ node.length
-#             n.length = k
-#             self.fill_length_inside(n)
-
-
+from anytree import Node, RenderTree, NodeMixin, PreOrderIter
+import math
+from anytree.search import find
+from anytree.exporter import DotExporter
+import pandas as pd
+from tqdm import tqdm
 from neurom.io import swc
-import napari
-data = swc.read('data1.swc')
-print(data.neurite_root_section_ids())
-# napari.view_shapes([data.data_block[:, :3]], shape_type='path', edge_color='red', ndisplay=3)
+
+
+class Tree():  # Just an example of a base class
+
+    def make_tree(self, csv_file):
+        df = pd.read_csv(csv_file)
+        self.nodes_count = len(df.index)
+
+        with tqdm(total=len(df.index)) as pbar:
+            for node_no, x, y, parent in zip(df['Node_No'], df['X'], df['Y'], df['Parent_No']):
+                if parent == -1:
+                    root = MyNode2(node_no, x, y, parent=None, distance=0)
+                else:
+                    parent = find(root, lambda node: node.name == parent)
+                    parent_x = parent.x
+                    parent_y = parent.y
+                    parent_distance = parent.distance
+
+                    distance = parent_distance + math.sqrt(math.pow(x - parent_x, 2) +
+                                                           math.pow(y - parent_y, 2))
+                    x = MyNode2(node_no, x, y, parent=parent, distance=distance)
+                pbar.update(1)
+        self.root = root
+
+    def simplify_tree(self):
+        self.remove_single(self.root)
+
+    def remove_single(self, node):
+        print(len(node.children))
+        if len(node.children) !=0:
+            if len(node.children) == 1:
+                if node !=None :
+                    self.remove(node)
+
+    def remove(self, node):
+        node.parent.children = node.children
+        node.parent = None 
+        node.children = None 
+
+
+class MyNode2(Tree, NodeMixin):
+    def __init__(self, name, x, y, distance=None, parent=None, children=None):
+        super(MyNode2, self).__init__()
+        self.name = name
+        self.x = x
+        self.y = y
+        self.distance = distance
+        self.parent = parent
+        if children:
+            self.children = children
+
+tree1= Tree()
+tree1.make_tree('test.csv')
+
+tree1.simplify_tree()
+DotExporter(tree1.root).to_picture("tree2_root.png")
