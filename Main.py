@@ -28,7 +28,6 @@ print(dan.children)
 # (Node('/Udo/Dan/Jet'), Node('/Udo/Dan/Jan'), Node('/Udo/Dan/Joe'))
 
 
-<<<<<<< HEAD
 
 class MyBaseClass(object):  # Just an example of a base class
     pass
@@ -59,7 +58,6 @@ class MyTree(RenderTree):
             self.fill_length_inside(n)
 
 
-=======
 # class MyTree(RenderTree):
 #     def __init__(self, root):
 #         self.root = root
@@ -88,18 +86,8 @@ class MyTree(RenderTree):
 #             self.fill_length_inside(n)
 
 
-
-from anytree import NodeMixin, RenderTree
-class MyBaseClass(object):  # Just an example of a base class
-    pass
-
-class MyNode2(MyBaseClass, NodeMixin):  # Add Node feature
-    def __init__(self, id, x, y, parent=None, children=None):
-        super(MyNode2, self).__init__()
-        self.Id = id
-        self.X = x
-        self.Y = y
-        self.parent = parent
-        if children:  # set children only if given
-            self.children = children
->>>>>>> b9de5b938ba1fd1fcdc6590a32faaa583cb4ff4d
+from neurom.io import swc
+import napari
+data = swc.read('data1.swc')
+print(data.neurite_root_section_ids())
+# napari.view_shapes([data.data_block[:, :3]], shape_type='path', edge_color='red', ndisplay=3)
