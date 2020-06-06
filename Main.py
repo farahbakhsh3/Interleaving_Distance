@@ -61,19 +61,28 @@ class Tree():  # Just an example of a base class
         self.root = root
 
     def simplify_tree(self):
-        self.remove_single(self.root)
-
+        
+        self.remove_single(self.root.children[0])
+        
     def remove_single(self, node):
         print(len(node.children))
-        if len(node.children) !=0:
+    
+        if node.parent!= None:
             if len(node.children) == 1:
-                if node !=None :
-                    self.remove(node)
+                self.remove(node)
+                self.remove_single(node.parent)
+            else:
+               for n in node.children:
+                   self.remove_single(n)
+               
+        else:
+            self.remove_single(node.children)
 
     def remove(self, node):
-        node.parent.children = node.children
-        node.parent = None 
-        node.children = None 
+        if node.parent != None:
+            node.parent.children.add(node.children)
+            node.parent.children.remove(node)
+               
 
 
 class MyNode2(Tree, NodeMixin):
@@ -86,9 +95,15 @@ class MyNode2(Tree, NodeMixin):
         self.parent = parent
         if children:
             self.children = children
+            
+    def add_children(self, node): #we want to add node to the children of self
+        
+        node.parent = self
 
-tree1= Tree()
-tree1.make_tree('test.csv')
+#tree1= Tree()
+#tree1.make_tree('test.csv')
 
-tree1.simplify_tree()
-DotExporter(tree1.root).to_picture("tree2_root.png")
+#tree1.simplify_tree()
+#DotExporter(tree1.root).to_picture("tree2_root.png")
+
+
