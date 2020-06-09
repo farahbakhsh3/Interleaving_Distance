@@ -47,7 +47,6 @@ class Tree():  # Just an example of a base class
     def make_tree(self, csv_file):
         df = pd.read_csv(csv_file)
         self.nodes_count = len(df.index)
-
         with tqdm(total=len(df.index)) as pbar:
             for node_no, x, y, parent in zip(df['Node_No'], df['X'], df['Y'], df['Parent_No']):
                 if parent == -1:
@@ -57,7 +56,6 @@ class Tree():  # Just an example of a base class
                     parent_x = parent.x
                     parent_y = parent.y
                     parent_distance = parent.distance
-
                     distance = parent_distance + math.sqrt(math.pow(x - parent_x, 2) +
                                                            math.pow(y - parent_y, 2))
                     x = MyNode2(node_no, x, y, parent=parent, distance=distance)
@@ -89,16 +87,16 @@ class Tree():  # Just an example of a base class
             list_of_functions1.append(-(node.distance))
         for pre, fill, node in RenderTree(tree2.root):
             list_of_functions1.append(-(node.distance)-epsilon)
-        list_of_functions1.sort(reverse=True)
+        list_of_functions1.sort(reverse=True) # from bigest(0) to smalest
          
         list_of_functions2 = []
         for pre, fill, node in RenderTree(tree2.root):
             list_of_functions2.append(-(node.distance))
         for pre, fill, node in RenderTree(self.root):
             list_of_functions2.append(-(node.distance)+epsilon)
-        list_of_functions2.sort(reverse=True)
+        list_of_functions2.sort(reverse=True) # from bigest(0) to smalest
         
-        l = list(self.root.children)
+        l = list(self.root.children) 
         
 
 class MyNode2(Tree, NodeMixin):
@@ -112,6 +110,14 @@ class MyNode2(Tree, NodeMixin):
         if children:
             self.children = children
             
+    def make_long(self,list_of_distance):
+#        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
+        for d in list_of_distance:
+            list_of_distance.remove(d)
+            self.add_child(Mynode2(d))  # Mynode2(d) just d is important 
+            self.make_long(Mynode2(d), list_of_distance)
+            
+        
     def add_child(self, node): #we want to add node between self and its parent 
         sf = self.parent 
         cl = list(sf.children)
@@ -123,8 +129,19 @@ class MyNode2(Tree, NodeMixin):
         cl = list(self.children)
         cl.remove(node)
         cl.append(node.children[0])
-        self.children = tuple(cl)    
-
+        self.children = tuple(cl)   
+        
+        
+class Mylist(list):
+    
+    def numbers_bet_two_distance(self,a,b):  
+        l = []
+        self.sort() # list is sorted from big to smal
+        for d in self:
+            if b<d<a :
+                l.append(d)
+        return l
+            
 #tree1= Tree()
 #tree1.make_tree('test.csv')
 #
