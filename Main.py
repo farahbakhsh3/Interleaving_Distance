@@ -69,7 +69,6 @@ class Tree():  # Just an example of a base class
         
     def remove_single(self, node):
 #        print(len(node.children))
-    
         if node.parent != None:
             if len(node.children) == 1:
                 x = node.parent 
@@ -79,13 +78,28 @@ class Tree():  # Just an example of a base class
             else:
                for n in node.children:
                    self.remove_single(n)
-               
         else:
             for n in node.children:
                 self.remove_single(n)               
 
-    def Augmented_Tree(self):
-        print(1)
+
+    def augmented_tree(self, tree2, epsilon):
+        list_of_functions1 = []
+        for pre, fill, node in RenderTree(self.root):
+            list_of_functions1.append(-(node.distance))
+        for pre, fill, node in RenderTree(tree2.root):
+            list_of_functions1.append(-(node.distance)-epsilon)
+        list_of_functions1.sort(reverse=True)
+         
+        list_of_functions2 = []
+        for pre, fill, node in RenderTree(tree2.root):
+            list_of_functions2.append(-(node.distance))
+        for pre, fill, node in RenderTree(self.root):
+            list_of_functions2.append(-(node.distance)+epsilon)
+        list_of_functions2.sort(reverse=True)
+        
+        l = list(self.root.children)
+        
 
 class MyNode2(Tree, NodeMixin):
     def __init__(self, name, x, y, distance=None, parent=None, children=None):
