@@ -68,7 +68,7 @@ class Tree():  # Just an example of a base class
         self.remove_single(self.root.children[0])
         
     def remove_single(self, node):
-        print(len(node.children))
+#        print(len(node.children))
     
         if node.parent != None:
             if len(node.children) == 1:
@@ -84,6 +84,8 @@ class Tree():  # Just an example of a base class
             for n in node.children:
                 self.remove_single(n)               
 
+    def Augmented_Tree(self):
+        print(1)
 
 class MyNode2(Tree, NodeMixin):
     def __init__(self, name, x, y, distance=None, parent=None, children=None):
@@ -96,10 +98,12 @@ class MyNode2(Tree, NodeMixin):
         if children:
             self.children = children
             
-    def add_c(self, node): #we want to add node to the children of self
-        cl = list(self.children)
+    def add_child(self, node): #we want to add node between self and its parent 
+        sf = self.parent 
+        cl = list(sf.children)
         cl.append(node)
-        self.children = tuple(cl)
+        cl.remove(self)
+        sf.children = tuple(cl)
 
     def remove_children(self, node): #we want to add node to the children of self
         cl = list(self.children)
@@ -107,10 +111,10 @@ class MyNode2(Tree, NodeMixin):
         cl.append(node.children[0])
         self.children = tuple(cl)    
 
-tree1= Tree()
-tree1.make_tree('test.csv')
-
-tree1.simplify_tree()
-DotExporter(tree1.root).to_picture("tree2_root.png")
+#tree1= Tree()
+#tree1.make_tree('test.csv')
+#
+#tree1.simplify_tree()
+#DotExporter(tree1.root).to_picture("tree2_root.png")
 
 
