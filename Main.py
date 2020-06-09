@@ -96,8 +96,26 @@ class Tree():  # Just an example of a base class
             list_of_functions2.append(-(node.distance)+epsilon)
         list_of_functions2.sort(reverse=True) # from bigest(0) to smalest
         
-        l = list(self.root.children) 
+        nodes = list(self.root.children) 
+        l = Mylist(list_of_functions1) 
+        for n in nodes:
+            li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
+            if len(li)>0:
+                n.make_long(li)
+            nodes.remove(n)
+            for node in n.children:
+                nodes.add(node)
         
+        nodes2 = list(tree2.root.children) 
+        l2 = Mylist(list_of_functions2) 
+        for n in nodes2:
+            li2 = l2.numbers_bet_two_distance(n.distance, n.parent.distance)
+            if len(li2)>0:
+                n.make_long(li2)
+            nodes2.remove(n)
+            for node in n.children:
+                nodes2.add(node)
+                
 
 class MyNode2(Tree, NodeMixin):
     def __init__(self, name, x, y, distance=None, parent=None, children=None):
@@ -138,7 +156,7 @@ class Mylist(list):
         l = []
         self.sort() # list is sorted from big to smal
         for d in self:
-            if b<d<a :
+            if a<d<b :
                 l.append(d)
         return l
             
