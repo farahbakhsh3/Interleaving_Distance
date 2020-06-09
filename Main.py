@@ -8,12 +8,17 @@ dan = Node("Dan", parent=udo)
 jet = Node("Jet", parent=dan)
 jan = Node("Jan", parent=dan)
 joe = Node("Joe", parent=dan)
+#Node("Joe", parent=marc)
+dan.children = [jet, jan]
+type(dan.children)
 us = Node("Us")
 
 print(udo)
 # Node('/Udo')
-print(joe)
+#print(joe)
 # Node('/Udo/Dan/Joe')
+#def add_children(father, node): #we want to add node to the children of self
+#    father.children = father.children + tuple(node)
 
 for pre, fill, node in RenderTree(udo):
     print("%s%s" % (pre, node.name))
@@ -25,7 +30,6 @@ for pre, fill, node in RenderTree(udo):
 #     ├── Jan
 #     └── Joe
 
-print(dan.children)
 # (Node('/Udo/Dan/Jet'), Node('/Udo/Dan/Jan'), Node('/Udo/Dan/Joe'))
 
 
@@ -61,28 +65,24 @@ class Tree():  # Just an example of a base class
         self.root = root
 
     def simplify_tree(self):
-        
         self.remove_single(self.root.children[0])
         
     def remove_single(self, node):
         print(len(node.children))
     
-        if node.parent!= None:
+        if node.parent != None:
             if len(node.children) == 1:
-                self.remove(node)
-                self.remove_single(node.parent)
+                x = node.parent 
+                node.parent.remove_children(node)
+                for n in x.children:
+                    self.remove_single(n)
             else:
                for n in node.children:
                    self.remove_single(n)
                
         else:
-            self.remove_single(node.children)
-
-    def remove(self, node):
-        if node.parent != None:
-            node.parent.children.add(node.children)
-            node.parent.children.remove(node)
-               
+            for n in node.children:
+                self.remove_single(n)               
 
 
 class MyNode2(Tree, NodeMixin):
@@ -96,14 +96,21 @@ class MyNode2(Tree, NodeMixin):
         if children:
             self.children = children
             
-    def add_children(self, node): #we want to add node to the children of self
-        
-        node.parent = self
+    def add_c(self, node): #we want to add node to the children of self
+        cl = list(self.children)
+        cl.append(node)
+        self.children = tuple(cl)
 
-#tree1= Tree()
-#tree1.make_tree('test.csv')
+    def remove_children(self, node): #we want to add node to the children of self
+        cl = list(self.children)
+        cl.remove(node)
+        cl.append(node.children[0])
+        self.children = tuple(cl)    
 
-#tree1.simplify_tree()
-#DotExporter(tree1.root).to_picture("tree2_root.png")
+tree1= Tree()
+tree1.make_tree('test.csv')
+
+tree1.simplify_tree()
+DotExporter(tree1.root).to_picture("tree2_root.png")
 
 
