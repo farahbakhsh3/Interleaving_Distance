@@ -99,7 +99,7 @@ class Tree():  # Just an example of a base class
 #        l = Mylist(list_of_functions1) 
 #        for n in nodes:
 #            li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
-#            if len(li)>0:
+#            if len(\li)>0:
 #                n.make_long(li)
 #            nodes.remove(n)
 #            for node in n.children:
@@ -218,7 +218,8 @@ class MyNode2(Tree, NodeMixin):
             
     def make_long(self,list_of_distance):
 #        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
-        for d in list_of_distance:
+        if len(list_of_distance)>0:
+            d =list_of_distance[0]
             list_of_distance.remove(d)
             self.add_child(Mynode2(d))  # Mynode2(d) just d is important 
             self.make_long(Mynode2(d), list_of_distance)
