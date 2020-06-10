@@ -55,7 +55,7 @@ class Tree():  # Just an example of a base class
                     parent_x = parent.x
                     parent_y = parent.y
                     parent_distance = parent.distance
-                    distance = parent_distance + math.sqrt(math.pow(x - parent_x, 2) +
+                    distance = parent_distance - math.sqrt(math.pow(x - parent_x, 2) +
                                                            math.pow(y - parent_y, 2))
                     x = MyNode2(node_no, x, y, parent=parent, distance=distance)
                 pbar.update(1)
@@ -103,7 +103,7 @@ class Tree():  # Just an example of a base class
                 n.make_long(li)
             nodes.remove(n)
             for node in n.children:
-                nodes.add(node)
+                nodes.append(node)
         
         nodes2 = list(tree2.root.children) 
         l2 = Mylist(list_of_functions2) 
@@ -113,7 +113,7 @@ class Tree():  # Just an example of a base class
                 n.make_long(li2)
             nodes2.remove(n)
             for node in n.children:
-                nodes2.add(node)
+                nodes2.append(node)
       
 #    def interleaving_distance(self, tree2, epsilon):
 #        
@@ -221,7 +221,7 @@ class MyNode2(Tree, NodeMixin):
         if len(list_of_distance) > 0:
             d = list_of_distance[0]
             list_of_distance.remove(d)
-            name = self.name+"0"
+            name = self.name * 10
             n = Mynode2(name,0,0,d)
             self.add_child(n)  # Mynode2(d) just d is important 
             n.make_long(n, list_of_distance)
@@ -242,7 +242,6 @@ class MyNode2(Tree, NodeMixin):
         
         
 class Mylist(list):
-    
     def numbers_bet_two_distance(self,a,b):  
         l = []
         self.sort() # list is sorted from big to smal
@@ -251,6 +250,8 @@ class Mylist(list):
                 l.append(d)
         return l
             
+    
+    
 tree1= Tree()
 tree1.make_tree('test.csv')
 #
@@ -262,5 +263,11 @@ tree2= Tree()
 tree2.make_tree('test2.csv')
 #
 tree2.simplify_tree()
-DotExporter(tree1.root).to_picture("tree2_root.png")
+DotExporter(tree2.root).to_picture("tree2_root.png")
+
+tree1.augmented_tree(tree2,1)
+DotExporter(tree1.root).to_picture("tree1_root_aug.png")
+
+
+
 
