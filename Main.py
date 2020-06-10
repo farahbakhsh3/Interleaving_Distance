@@ -80,125 +80,125 @@ class Tree():  # Just an example of a base class
                 self.remove_single(n)               
 
 
-#    def augmented_tree(self, tree2, epsilon):
-#        list_of_functions1 = []
-#        for pre, fill, node in RenderTree(self.root):
-#            list_of_functions1.append(-(node.distance))
-#        for pre, fill, node in RenderTree(tree2.root):
-#            list_of_functions1.append(-(node.distance)-epsilon)
-#        list_of_functions1.sort(reverse=True) # from bigest(0) to smalest
-#         
-#        list_of_functions2 = []
-#        for pre, fill, node in RenderTree(tree2.root):
-#            list_of_functions2.append(-(node.distance))
-#        for pre, fill, node in RenderTree(self.root):
-#            list_of_functions2.append(-(node.distance)+epsilon)
-#        list_of_functions2.sort(reverse=True) # from bigest(0) to smalest
-#        
-#        nodes = list(self.root.children) 
-#        l = Mylist(list_of_functions1) 
-#        for n in nodes:
-#            li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
-#            if len(\li)>0:
-#                n.make_long(li)
-#            nodes.remove(n)
-#            for node in n.children:
-#                nodes.add(node)
-#        
-#        nodes2 = list(tree2.root.children) 
-#        l2 = Mylist(list_of_functions2) 
-#        for n in nodes2:
-#            li2 = l2.numbers_bet_two_distance(n.distance, n.parent.distance)
-#            if len(li2)>0:
-#                n.make_long(li2)
-#            nodes2.remove(n)
-#            for node in n.children:
-#                nodes2.add(node)
-      
-    def interleaving_distance(self, tree2, epsilon):
-        
-        nodelisttree1 = []
-        nodelisttree2 = []
+    def augmented_tree(self, tree2, epsilon):
         list_of_functions1 = []
-        list_of_functions2 = []
-        
-        def augmented_tree(self, tree2, epsilon):
-            for pre, fill, node in RenderTree(self.root):
-                list_of_functions1.append(-(node.distance))
-                
-            for pre, fill, node in RenderTree(tree2.root):
-                list_of_functions1.append(-(node.distance)-epsilon)
-                
-            list_of_functions1.sort(reverse=True) # from bigest(0) to smalest
-             
-            
-            for pre, fill, node in RenderTree(tree2.root):
-                list_of_functions2.append(-(node.distance))
-            for pre, fill, node in RenderTree(self.root):
-                list_of_functions2.append(-(node.distance)+epsilon)
-            list_of_functions2.sort(reverse=True) # from bigest(0) to smalest
-            
-            nodes = list(self.root.children) 
-            l = Mylist(list_of_functions1) 
-            for n in nodes:
-                li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
-                if len(li)>0:
-                    n.make_long(li)
-                nodes.remove(n)
-                for node in n.children:
-                    nodes.add(node)
-            
-            nodes2 = list(tree2.root.children) 
-            l2 = Mylist(list_of_functions2) 
-            for n in nodes2:
-                li2 = l2.numbers_bet_two_distance(n.distance, n.parent.distance)
-                if len(li2)>0:
-                    n.make_long(li2)
-                nodes2.remove(n)
-                for node in n.children:
-                    nodes2.add(node)
-                
-        ##############################################    
-        # first we put all the nodes in a list to be able to delet them easily
-        self.augmented_tree(tree2,epsilon)
         for pre, fill, node in RenderTree(self.root):
-            nodelisttree1.append(node)     
+            list_of_functions1.append(-(node.distance))
         for pre, fill, node in RenderTree(tree2.root):
-            nodelisttree2.append(node) 
-           
-        # first line
-        List_gh = [] 
-        List_nu = []
-        nodelist1_new = []
-        nodelist2_new = []
-        d = list_of_functions1
-        for node in nodelisttree1: 
-            if node.distance == d:
-                nodelist1_new.append(node)
-                nodelisttree1.remove(node)
-        for node in nodelisttree2: 
-            if node.distance == d+epsilon:
-                nodelist2_new.append(node)
-                nodelisttree2.remove(node)
+            list_of_functions1.append(-(node.distance)-epsilon)
+        list_of_functions1.sort(reverse=True) # from bigest(0) to smalest
+         
+        list_of_functions2 = []
+        for pre, fill, node in RenderTree(tree2.root):
+            list_of_functions2.append(-(node.distance))
+        for pre, fill, node in RenderTree(self.root):
+            list_of_functions2.append(-(node.distance)+epsilon)
+        list_of_functions2.sort(reverse=True) # from bigest(0) to smalest
         
+        nodes = list(self.root.children) 
+        l = Mylist(list_of_functions1) 
+        for n in nodes:
+            li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
+            if len(li)>0:
+                n.make_long(li)
+            nodes.remove(n)
+            for node in n.children:
+                nodes.add(node)
         
-        
-        # other lines
-        for d in list_of_functions1:
-            List_gh.clear()
-            List_gh = List_nu 
-            List_nu.clear()
-            
-            nodelist1_new.clear()
-            nodelist2_new.clear()
-            for node in nodelisttree1: 
-                if node.distance == d:
-                    nodelist1_new.append(node)
-                    nodelisttree1.remove(node)
-            for node in nodelisttree2: 
-                if node.distance == d+epsilon:
-                    nodelist2_new.append(node)
-                    nodelisttree2.remove(node)
+        nodes2 = list(tree2.root.children) 
+        l2 = Mylist(list_of_functions2) 
+        for n in nodes2:
+            li2 = l2.numbers_bet_two_distance(n.distance, n.parent.distance)
+            if len(li2)>0:
+                n.make_long(li2)
+            nodes2.remove(n)
+            for node in n.children:
+                nodes2.add(node)
+      
+#    def interleaving_distance(self, tree2, epsilon):
+#        
+#        nodelisttree1 = []
+#        nodelisttree2 = []
+#        list_of_functions1 = []
+#        list_of_functions2 = []
+#        
+#        def augmented_tree(self, tree2, epsilon):
+#            for pre, fill, node in RenderTree(self.root):
+#                list_of_functions1.append(-(node.distance))
+#                
+#            for pre, fill, node in RenderTree(tree2.root):
+#                list_of_functions1.append(-(node.distance)-epsilon)
+#                
+#            list_of_functions1.sort(reverse=True) # from bigest(0) to smalest
+#             
+#            
+#            for pre, fill, node in RenderTree(tree2.root):
+#                list_of_functions2.append(-(node.distance))
+#            for pre, fill, node in RenderTree(self.root):
+#                list_of_functions2.append(-(node.distance)+epsilon)
+#            list_of_functions2.sort(reverse=True) # from bigest(0) to smalest
+#            
+#            nodes = list(self.root.children) 
+#            l = Mylist(list_of_functions1) 
+#            for n in nodes:
+#                li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
+#                if len(li)>0:
+#                    n.make_long(li)
+#                nodes.remove(n)
+#                for node in n.children:
+#                    nodes.add(node)
+#            
+#            nodes2 = list(tree2.root.children) 
+#            l2 = Mylist(list_of_functions2) 
+#            for n in nodes2:
+#                li2 = l2.numbers_bet_two_distance(n.distance, n.parent.distance)
+#                if len(li2)>0:
+#                    n.make_long(li2)
+#                nodes2.remove(n)
+#                for node in n.children:
+#                    nodes2.add(node)
+#                
+#        ##############################################    
+#        # first we put all the nodes in a list to be able to delet them easily
+#        self.augmented_tree(tree2,epsilon)
+#        for pre, fill, node in RenderTree(self.root):
+#            nodelisttree1.append(node)     
+#        for pre, fill, node in RenderTree(tree2.root):
+#            nodelisttree2.append(node) 
+#           
+#        # first line
+#        List_gh = [] 
+#        List_nu = []
+#        nodelist1_new = []
+#        nodelist2_new = []
+#        d = list_of_functions1
+#        for node in nodelisttree1: 
+#            if node.distance == d:
+#                nodelist1_new.append(node)
+#                nodelisttree1.remove(node)
+#        for node in nodelisttree2: 
+#            if node.distance == d+epsilon:
+#                nodelist2_new.append(node)
+#                nodelisttree2.remove(node)
+#        
+#        
+#        
+#        # other lines
+#        for d in list_of_functions1:
+#            List_gh.clear()
+#            List_gh = List_nu 
+#            List_nu.clear()
+#            
+#            nodelist1_new.clear()
+#            nodelist2_new.clear()
+#            for node in nodelisttree1: 
+#                if node.distance == d:
+#                    nodelist1_new.append(node)
+#                    nodelisttree1.remove(node)
+#            for node in nodelisttree2: 
+#                if node.distance == d+epsilon:
+#                    nodelist2_new.append(node)
+#                    nodelisttree2.remove(node)
             
             
         
@@ -251,10 +251,16 @@ class Mylist(list):
                 l.append(d)
         return l
             
-#tree1= Tree()
-#tree1.make_tree('test.csv')
+tree1= Tree()
+tree1.make_tree('test.csv')
 #
-#tree1.simplify_tree()
-#DotExporter(tree1.root).to_picture("tree2_root.png")
+tree1.simplify_tree()
+DotExporter(tree1.root).to_picture("tree1_root.png")
 
+
+tree2= Tree()
+tree2.make_tree('test2.csv')
+#
+tree2.simplify_tree()
+DotExporter(tree1.root).to_picture("tree2_root.png")
 
