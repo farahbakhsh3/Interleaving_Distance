@@ -222,7 +222,7 @@ class MyNode2(Tree, NodeMixin):
             d = list_of_distance[0]
             list_of_distance.remove(d)
             name = self.name+"0"
-            n = Mynode2(name,d)
+            n = Mynode2(name,0,0,d)
             self.add_child(n)  # Mynode2(d) just d is important 
             n.make_long(n, list_of_distance)
             
