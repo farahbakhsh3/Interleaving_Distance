@@ -218,11 +218,12 @@ class MyNode2(Tree, NodeMixin):
             
     def make_long(self,list_of_distance):
 #        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
-        if len(list_of_distance)>0:
-            d =list_of_distance[0]
+        if len(list_of_distance) > 0:
+            d = list_of_distance[0]
             list_of_distance.remove(d)
-            self.add_child(Mynode2(d))  # Mynode2(d) just d is important 
-            self.make_long(Mynode2(d), list_of_distance)
+            n = Mynode2(d)
+            self.add_child(n)  # Mynode2(d) just d is important 
+            n.make_long(n, list_of_distance)
             
         
     def add_child(self, node): #we want to add node between self and its parent 
