@@ -1,36 +1,36 @@
-#from anytree import Node, RenderTree, NodeMixin
-#
-#
-#udo = Node("Udo")
-#marc = Node("Marc", parent=udo)
-#lian = Node("Lian", parent=marc)
-#dan = Node("Dan", parent=udo)
-#jet = Node("Jet", parent=dan)
-#jan = Node("Jan", parent=dan)
-#joe = Node("Joe", parent=dan)
-##Node("Joe", parent=marc)
-#dan.children = [jet, jan]
-#type(dan.children)
-#us = Node("Us")
-#
-#print(udo)
-## Node('/Udo')
-##print(joe)
-## Node('/Udo/Dan/Joe')
-##def add_children(father, node): #we want to add node to the children of self
-##    father.children = father.children + tuple(node)
-#
-#for pre, fill, node in RenderTree(udo):
-#    print("%s%s" % (pre, node.name))
-## Udo
-## ├── Marc
-## │   └── Lian
-## └── Dan
-##     ├── Jet
-##     ├── Jan
-##     └── Joe
-#
-## (Node('/Udo/Dan/Jet'), Node('/Udo/Dan/Jan'), Node('/Udo/Dan/Joe'))
+from anytree import Node, RenderTree, NodeMixin
+
+
+udo = Node("Udo")
+marc = Node("Marc", parent=udo)
+lian = Node("Lian", parent=marc)
+dan = Node("Dan", parent=udo)
+jet = Node("Jet", parent=dan)
+jan = Node("Jan", parent=dan)
+joe = Node("Joe", parent=dan)
+#Node("Joe", parent=marc)
+dan.children = [jet, jan]
+type(dan.children)
+us = Node("Us")
+
+print(udo)
+# Node('/Udo')
+#print(joe)
+# Node('/Udo/Dan/Joe')
+#def add_children(father, node): #we want to add node to the children of self
+#    father.children = father.children + tuple(node)
+
+for pre, fill, node in RenderTree(udo):
+    print("%s%s" % (pre, node.name))
+# Udo
+# ├── Marc
+# │   └── Lian
+# └── Dan
+#     ├── Jet
+#     ├── Jan
+#     └── Joe
+
+# (Node('/Udo/Dan/Jet'), Node('/Udo/Dan/Jan'), Node('/Udo/Dan/Joe'))
 
 
 from anytree import Node, RenderTree, NodeMixin, PreOrderIter
@@ -83,16 +83,17 @@ class Tree():  # Just an example of a base class
     def augmented_tree(self, tree2, epsilon):
         list_of_functions1 = []
         for pre, fill, node in RenderTree(self.root):
-            list_of_functions1.append(-(node.distance))
+            list_of_functions1.append((node.distance))
         for pre, fill, node in RenderTree(tree2.root):
-            list_of_functions1.append(-(node.distance)-epsilon)
+            list_of_functions1.append((node.distance)-epsilon)
         list_of_functions1.sort(reverse=True) # from bigest(0) to smalest
-         
+        
+        
         list_of_functions2 = []
         for pre, fill, node in RenderTree(tree2.root):
-            list_of_functions2.append(-(node.distance))
+            list_of_functions2.append((node.distance))
         for pre, fill, node in RenderTree(self.root):
-            list_of_functions2.append(-(node.distance)+epsilon)
+            list_of_functions2.append((node.distance)+epsilon)
         list_of_functions2.sort(reverse=True) # from bigest(0) to smalest
         
         nodes = list(self.root.children) 
@@ -100,6 +101,7 @@ class Tree():  # Just an example of a base class
         for n in nodes:
             li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
             if len(li)>0:
+                print(len(li))
                 n.make_long(li)
             nodes.remove(n)
             for node in n.children:
@@ -217,24 +219,33 @@ class MyNode2(Tree, NodeMixin):
             self.children = children
             
     def make_long(self,list_of_distance):
-#        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
+        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
         if len(list_of_distance) > 0:
             d = list_of_distance[0]
             list_of_distance.remove(d)
-            name = self.name * 10
-            n = Mynode2(name,0,0,d)
-            self.add_child(n)  # Mynode2(d) just d is important 
-            n.make_long(n, list_of_distance)
+            name = round(self.name + 0.0001,5)
+            n = self.add_child(name, d)  # Mynode2(d) just d is important 
+            n.make_long(list_of_distance)
             
         
-    def add_child(self, node): #we want to add node between self and its parent 
+    def add_child(self, name, d): #we want to add node between self and its parent 
         sf = self.parent 
-        cl = list(sf.children)
-        cl.append(node)
-        cl.remove(self)
-        sf.children = tuple(cl)
-
-    def remove_children(self, node): #we want to add node to the children of self
+        l = list(sf.children)
+        l.remove(self)
+        n = MyNode2(name,0,0,d, sf,[self])
+        l.append(n)
+        sf.children = tuple(l)
+        
+        self.parent = n
+        return n
+        
+## from a given node self which child is his parent, removes child
+#    def remove_child(self, child):
+#        cl = list(self.children)
+#        cl.remove(child)
+        
+        
+    def remove_children(self, node): #
         cl = list(self.children)
         cl.remove(node)
         cl.append(node.children[0])
@@ -264,10 +275,11 @@ tree2.make_tree('test2.csv')
 #
 tree2.simplify_tree()
 DotExporter(tree2.root).to_picture("tree2_root.png")
-
+#
 tree1.augmented_tree(tree2,1)
 DotExporter(tree1.root).to_picture("tree1_root_aug.png")
-
-
+#
+tree2.augmented_tree(tree1,1)
+DotExporter(tree2.root).to_picture("tree2_root_aug.png")
 
 
