@@ -55,7 +55,6 @@ class Tree():  # Just an example of a base class
         for pre, fill, node in RenderTree(tree2.root):
             list_of_function1.append((node.distance)+epsilon)
         list_of_function1.sort(reverse=True) # from bigest(0) to smalest
-        print(list_of_function1)
         for d in list_of_function1:
             if d not in list_of_functions1:
                 list_of_functions1.append(d)
@@ -76,7 +75,6 @@ class Tree():  # Just an example of a base class
         while nodes:
             n = nodes[0]
             li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
-            print(len(li))
             if len(li)>0:
                 n.make_long(li)
             nodes.remove(n)
@@ -162,20 +160,26 @@ class Mylist(list):
 #        return x
             
     
+if __name__ == "__main__":
+    tree1= Tree()
+    tree1.make_tree('test.csv')
+    #
+    tree1.simplify_tree()
+    DotExporter(tree1.root).to_picture("tree1_root.png")
     
-tree1= Tree()
-tree1.make_tree('test.csv')
-#
-tree1.simplify_tree()
-DotExporter(tree1.root).to_picture("tree1_root.png")
+    
+    tree2= Tree()
+    tree2.make_tree('test2.csv')
+    #
+    tree2.simplify_tree()
+    DotExporter(tree2.root).to_picture("tree2_root.png")
+    
+    
+    print("Simplified trees were made")
+    
+    tree2.interleaving_distance(tree1,1)
+    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
+    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
+    
+    print("Augmented trees were made")
 
-
-tree2= Tree()
-tree2.make_tree('test2.csv')
-#
-tree2.simplify_tree()
-DotExporter(tree2.root).to_picture("tree2_root.png")
-
-tree2.interleaving_distance(tree1,1)
-DotExporter(tree2.root).to_picture("tree2_root_aug.png")
-DotExporter(tree1.root).to_picture("tree1_root_aug.png")
