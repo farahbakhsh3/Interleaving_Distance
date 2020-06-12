@@ -7,6 +7,25 @@ import pandas as pd
 from tqdm import tqdm
 
 
+        
+        
+class Mylist(list):
+    
+    def numbers_bet_two_distance(self,a,b):  
+        l = []
+#        self.sort() # list is sorted from big to smal
+        for d in self:
+            if a<d<b :
+                l.append(d)
+        return l
+    
+#    def unique(self):
+#        x = Mylist()
+#        for d in self:
+#            if d not in x:
+#                x.append(d)
+#        return x
+
 class Tree():  # Just an example of a base class
 
     def make_tree(self, csv_file):
@@ -94,16 +113,57 @@ class Tree():  # Just an example of a base class
                 
         return list_of_functions1
     
-      
+     
+        
+    
     def interleaving_distance(self, tree2, epsilon):
+        dis = True 
         
         nodelisttree1 = []
         nodelisttree2 = []
         list_of_functions1 = self.augmented_tree(tree2, epsilon)
+#         first we put all the nodes in a list to be able to delet them easily
         
-             
-
-class MyNode2(Tree, NodeMixin):
+        for pre, fill, node in RenderTree(self.root):
+            nodelisttree1.append(node)     
+        for pre, fill, node in RenderTree(tree2.root):
+            nodelisttree2.append(node) 
+        
+        # first line
+        List_gh = [] 
+        List_nu = []
+        nodelist1_new = []
+        nodelist2_new = []
+        d = list_of_functions1[0]
+        list_of_functions1.remove(d)
+        for node in nodelisttree1: 
+            if node.distance == d:
+                nodelist1_new.append(node)
+                nodelisttree1.remove(node)
+        for node in nodelisttree2: 
+            if node.distance == d + epsilon:
+                nodelist2_new.append(node)
+                nodelisttree2.remove(node)
+        
+#       no of children of the first line
+        ch1= []
+        for n in nodelist1_new:
+            for ni in n.children:
+                ch1.append(ni)
+#      no of children of the second line
+        ch2 = []
+        for n in nodelist2_new:
+            for ni in n.children:
+                ch2.append(ni)
+        
+        
+        if len(ch2)==0:
+            if len(ch1)!=0:
+                dis = False
+                return dis
+            
+        
+ class MyNode2(Tree, NodeMixin):
     def __init__(self, name, x, y, distance=None, parent=None, children=None):
         super(MyNode2, self).__init__()
         self.name = name
@@ -139,25 +199,11 @@ class MyNode2(Tree, NodeMixin):
         cl = list(self.children)
         cl.remove(node)
         cl.append(node.children[0])
-        self.children = tuple(cl)   
+        self.children = tuple(cl)           
         
-        
-class Mylist(list):
-    
-    def numbers_bet_two_distance(self,a,b):  
-        l = []
-#        self.sort() # list is sorted from big to smal
-        for d in self:
-            if a<d<b :
-                l.append(d)
-        return l
-    
-#    def unique(self):
-#        x = Mylist()
-#        for d in self:
-#            if d not in x:
-#                x.append(d)
-#        return x
+                
+
+
             
     
 if __name__ == "__main__":
@@ -183,3 +229,58 @@ if __name__ == "__main__":
     
     print("Augmented trees were made")
 
+
+
+
+
+#def interleaving_distance(self, tree2, epsilon):
+#        
+#        nodelisttree1 = []
+#        nodelisttree2 = []
+#        list_of_functions1 = []
+#        list_of_functions2 = []
+
+#                
+#        ##############################################    
+#        # first we put all the nodes in a list to be able to delet them easily
+#        self.augmented_tree(tree2,epsilon)
+#        for pre, fill, node in RenderTree(self.root):
+#            nodelisttree1.append(node)     
+#        for pre, fill, node in RenderTree(tree2.root):
+#            nodelisttree2.append(node) 
+#           
+#        # first line
+#        List_gh = [] 
+#        List_nu = []
+#        nodelist1_new = []
+#        nodelist2_new = []
+#        d = list_of_functions1
+#        for node in nodelisttree1: 
+#            if node.distance == d:
+#                nodelist1_new.append(node)
+#                nodelisttree1.remove(node)
+#        for node in nodelisttree2: 
+#            if node.distance == d+epsilon:
+#                nodelist2_new.append(node)
+#                nodelisttree2.remove(node)
+#        
+#        
+#        
+#        # other lines
+#        for d in list_of_functions1:
+#            List_gh.clear()
+#            List_gh = List_nu 
+#            List_nu.clear()
+#            
+#            nodelist1_new.clear()
+#            nodelist2_new.clear()
+#            for node in nodelisttree1: 
+#                if node.distance == d:
+#                    nodelist1_new.append(node)
+#                    nodelisttree1.remove(node)
+#            for node in nodelisttree2: 
+#                if node.distance == d+epsilon:
+#                    nodelist2_new.append(node)
+#                    nodelisttree2.remove(node)
+            
+            
