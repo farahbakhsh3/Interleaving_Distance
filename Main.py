@@ -46,6 +46,9 @@ class MyNode2(Tree, NodeMixin):
         cl.remove(node)
         cl.append(node.children[0])
         self.children = tuple(cl) 
+        
+    def height(self):
+        return math.abs(self.distance-self.parent.distance)
 
 
         
@@ -164,6 +167,8 @@ class Tree():  # Just an example of a base class
         list_of_functions1 = self.augmented_tree(tree2, epsilon)
 #         first we put all the nodes in a list to be able to delet them easily
         
+        print("Augmented trees were made")
+        
         for pre, fill, node in RenderTree(self.root):
             nodelisttree1.append(node)     
         for pre, fill, node in RenderTree(tree2.root):
@@ -200,11 +205,15 @@ class Tree():  # Just an example of a base class
         if len(ch2)==0:
             if len(ch1)!=0:
                 dis = False
-                return dis
+                
             
-        
-           
-        
+        else:
+            for n in ch2:
+                if n.height() > 2*epsilon:
+                    dis = False 
+                    
+                
+        return dis
                 
 
 
@@ -227,11 +236,11 @@ if __name__ == "__main__":
     
     print("Simplified trees were made")
     
-    tree2.interleaving_distance(tree1,1)
+    print(tree2.interleaving_distance(tree1,1))
     DotExporter(tree2.root).to_picture("tree2_root_aug.png")
     DotExporter(tree1.root).to_picture("tree1_root_aug.png")
     
-    print("Augmented trees were made")
+    
 
 
 
