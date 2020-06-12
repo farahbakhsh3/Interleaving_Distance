@@ -8,6 +8,46 @@ from tqdm import tqdm
 
 
         
+class MyNode2(Tree, NodeMixin):
+    
+    def __init__(self, name, x, y, distance=None, parent=None, children=None):
+        super(MyNode2, self).__init__()
+        self.name = name
+        self.x = x
+        self.y = y
+        self.distance = distance
+        self.parent = parent
+        if children:
+            self.children = children
+            
+    def make_long(self,list_of_distance):
+#        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
+        if len(list_of_distance) > 0:
+            d = list_of_distance[0]
+            list_of_distance.remove(d)
+            name = round(self.name + 0.0001,5)
+            n = self.add_child(name, d)  # Mynode2(d) just d is important 
+            n.make_long(list_of_distance)
+            
+        
+    def add_child(self, name, d): #we want to add node between self and its parent 
+        sf = self.parent 
+        l = list(sf.children)
+        l.remove(self)
+        n = MyNode2(name,0,0,d, sf,[self])
+        l.append(n)
+        sf.children = tuple(l)
+        self.parent = n
+        return n
+        
+        
+    def remove_children(self, node): #
+        cl = list(self.children)
+        cl.remove(node)
+        cl.append(node.children[0])
+        self.children = tuple(cl) 
+
+
         
 class Mylist(list):
     
@@ -163,43 +203,7 @@ class Tree():  # Just an example of a base class
                 return dis
             
         
- class MyNode2(Tree, NodeMixin):
-    def __init__(self, name, x, y, distance=None, parent=None, children=None):
-        super(MyNode2, self).__init__()
-        self.name = name
-        self.x = x
-        self.y = y
-        self.distance = distance
-        self.parent = parent
-        if children:
-            self.children = children
-            
-    def make_long(self,list_of_distance):
-#        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
-        if len(list_of_distance) > 0:
-            d = list_of_distance[0]
-            list_of_distance.remove(d)
-            name = round(self.name + 0.0001,5)
-            n = self.add_child(name, d)  # Mynode2(d) just d is important 
-            n.make_long(list_of_distance)
-            
-        
-    def add_child(self, name, d): #we want to add node between self and its parent 
-        sf = self.parent 
-        l = list(sf.children)
-        l.remove(self)
-        n = MyNode2(name,0,0,d, sf,[self])
-        l.append(n)
-        sf.children = tuple(l)
-        self.parent = n
-        return n
-        
-        
-    def remove_children(self, node): #
-        cl = list(self.children)
-        cl.remove(node)
-        cl.append(node.children[0])
-        self.children = tuple(cl)           
+           
         
                 
 
