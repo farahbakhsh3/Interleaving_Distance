@@ -8,48 +8,6 @@ from tqdm import tqdm
 
 
         
-class MyNode2(Tree, NodeMixin):
-    
-    def __init__(self, name, x, y, distance=None, parent=None, children=None):
-        super(MyNode2, self).__init__()
-        self.name = name
-        self.x = x
-        self.y = y
-        self.distance = distance
-        self.parent = parent
-        if children:
-            self.children = children
-            
-    def make_long(self,list_of_distance):
-#        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
-        if len(list_of_distance) > 0:
-            d = list_of_distance[0]
-            list_of_distance.remove(d)
-            name = round(self.name + 0.0001,5)
-            n = self.add_child(name, d)  # Mynode2(d) just d is important 
-            n.make_long(list_of_distance)
-            
-        
-    def add_child(self, name, d): #we want to add node between self and its parent 
-        sf = self.parent 
-        l = list(sf.children)
-        l.remove(self)
-        n = MyNode2(name,0,0,d, sf,[self])
-        l.append(n)
-        sf.children = tuple(l)
-        self.parent = n
-        return n
-        
-        
-    def remove_children(self, node): #
-        cl = list(self.children)
-        cl.remove(node)
-        cl.append(node.children[0])
-        self.children = tuple(cl) 
-        
-    def height(self):
-        return math.abs(self.distance-self.parent.distance)
-
 
         
 class Mylist(list):
@@ -201,20 +159,59 @@ class Tree():  # Just an example of a base class
             for ni in n.children:
                 ch2.append(ni)
         
-        
         if len(ch2)==0:
             if len(ch1)!=0:
                 dis = False
-                
-            
         else:
             for n in ch2:
                 if n.height() > 2*epsilon:
-                    dis = False 
-                    
-                
+                    dis = False
+          
+            
         return dis
                 
+
+class MyNode2(Tree, NodeMixin):
+    
+    def __init__(self, name, x, y, distance=None, parent=None, children=None):
+        super(MyNode2, self).__init__()
+        self.name = name
+        self.x = x
+        self.y = y
+        self.distance = distance
+        self.parent = parent
+        if children:
+            self.children = children
+            
+    def make_long(self,list_of_distance):
+#        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
+        if len(list_of_distance) > 0:
+            d = list_of_distance[0]
+            list_of_distance.remove(d)
+            name = round(self.name + 0.0001,5)
+            n = self.add_child(name, d)  # Mynode2(d) just d is important 
+            n.make_long(list_of_distance)
+            
+        
+    def add_child(self, name, d): #we want to add node between self and its parent 
+        sf = self.parent 
+        l = list(sf.children)
+        l.remove(self)
+        n = MyNode2(name,0,0,d, sf,[self])
+        l.append(n)
+        sf.children = tuple(l)
+        self.parent = n
+        return n
+        
+        
+    def remove_children(self, node): #
+        cl = list(self.children)
+        cl.remove(node)
+        cl.append(node.children[0])
+        self.children = tuple(cl) 
+        
+    def height(self):
+        return math.abs(self.distance-self.parent.distance)
 
 
             
@@ -237,63 +234,7 @@ if __name__ == "__main__":
     print("Simplified trees were made")
     
     print(tree2.interleaving_distance(tree1,1))
-    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
-    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
+#    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
+#    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
     
     
-
-
-
-
-
-#def interleaving_distance(self, tree2, epsilon):
-#        
-#        nodelisttree1 = []
-#        nodelisttree2 = []
-#        list_of_functions1 = []
-#        list_of_functions2 = []
-
-#                
-#        ##############################################    
-#        # first we put all the nodes in a list to be able to delet them easily
-#        self.augmented_tree(tree2,epsilon)
-#        for pre, fill, node in RenderTree(self.root):
-#            nodelisttree1.append(node)     
-#        for pre, fill, node in RenderTree(tree2.root):
-#            nodelisttree2.append(node) 
-#           
-#        # first line
-#        List_gh = [] 
-#        List_nu = []
-#        nodelist1_new = []
-#        nodelist2_new = []
-#        d = list_of_functions1
-#        for node in nodelisttree1: 
-#            if node.distance == d:
-#                nodelist1_new.append(node)
-#                nodelisttree1.remove(node)
-#        for node in nodelisttree2: 
-#            if node.distance == d+epsilon:
-#                nodelist2_new.append(node)
-#                nodelisttree2.remove(node)
-#        
-#        
-#        
-#        # other lines
-#        for d in list_of_functions1:
-#            List_gh.clear()
-#            List_gh = List_nu 
-#            List_nu.clear()
-#            
-#            nodelist1_new.clear()
-#            nodelist2_new.clear()
-#            for node in nodelisttree1: 
-#                if node.distance == d:
-#                    nodelist1_new.append(node)
-#                    nodelisttree1.remove(node)
-#            for node in nodelisttree2: 
-#                if node.distance == d+epsilon:
-#                    nodelist2_new.append(node)
-#                    nodelisttree2.remove(node)
-            
-            
