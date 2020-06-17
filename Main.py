@@ -20,6 +20,12 @@ class Mylist(list):
                 l.append(d)
         return l
     
+    def nearest_lower(self, d):
+        i = 0
+        while d < self[i]:
+                i = i+1
+        return self[i]   
+            
 #    def unique(self):
 #        x = Mylist()
 #        for d in self:
@@ -29,6 +35,7 @@ class Mylist(list):
 
 class Tree():  # Just an example of a base class
 
+    
     def make_tree(self, csv_file):
         df = pd.read_csv(csv_file)
         self.nodes_count = len(df.index)
@@ -69,15 +76,15 @@ class Tree():  # Just an example of a base class
         list_of_functions1 = []
         list_of_functions2 = []
         
-        list_of_function1 = []
+        self.list_of_function1 = []
         for pre, fill, node in RenderTree(self.root):
-            list_of_function1.append((node.distance))
+            self.list_of_function1.append((node.distance))
         for pre, fill, node in RenderTree(tree2.root):
-            list_of_function1.append((node.distance)+epsilon)
-        list_of_function1.sort(reverse=True) # from bigest(0) to smalest
-        for d in list_of_function1:
-            if d not in list_of_functions1:
-                list_of_functions1.append(d)
+            self.list_of_function1.append((node.distance)+epsilon)
+        self.list_of_function1.sort(reverse=True) # from bigest(0) to smalest
+        for d in self.list_of_function1:
+            if d not in self.list_of_functions1:
+                self.list_of_functions1.append(d)
         list_of_function2 = []
         for pre, fill, node in RenderTree(tree2.root):
             list_of_function2.append((node.distance))
@@ -91,7 +98,7 @@ class Tree():  # Just an example of a base class
         nodes=[]
         nodes2=[]
         nodes = list(self.root.children) 
-        l = Mylist(list_of_functions1) 
+        l = Mylist(self.list_of_functions1) 
         while nodes:
             n = nodes[0]
             li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
@@ -112,7 +119,7 @@ class Tree():  # Just an example of a base class
             for node in n.children:
                 nodes2.append(node)
                 
-        return list_of_functions1
+        
     
      
         
@@ -122,7 +129,7 @@ class Tree():  # Just an example of a base class
         
         nodelisttree1 = []
         nodelisttree2 = []
-        list_of_functions1 = self.augmented_tree(tree2, epsilon)
+        self.augmented_tree(tree2, epsilon)
 #         first we put all the nodes in a list to be able to delet them easily
         
         print("Augmented trees were made")
@@ -137,8 +144,9 @@ class Tree():  # Just an example of a base class
         List_nu = []
         nodelist1_new = []
         nodelist2_new = []
-        d = list_of_functions1[0]
-        list_of_functions1.remove(d)
+        list_of_function = list_of_functions1.copy()
+        d = list_of_function[0]
+        list_of_function.remove(d)
         for node in nodelisttree1: 
             if node.distance == d:
                 nodelist1_new.append(node)
@@ -166,11 +174,59 @@ class Tree():  # Just an example of a base class
             for n in ch2:
                 if n.height() > 2*epsilon:
                     dis = False
-          
+                    
+#        lists of validpairs
+        dp = d + 2*epsilon
+        if  dp in list_of_function:
+             List_nu = self.validpc(self.allnode(dp))
+        
+#        other lines
+        for d in list_of_function:
+            list1 = self.allnode(d)
+            list2 = tree2.allnode(d+epsilon)
+            List_gh = List_nu 
+            List_nu = []
             
+            for pair in self.Valid_pair(list1,list2):
+                yes = True
+                for p in partition_of_children(pair):
+                    if p not in List_gh:
+                        yes = False
+                if yes:
+                    List_nu.append(pair)
         return dis
-                
 
+
+#    for any list of nodes in tree1 and nodes in tree2 returns all the valid pairs
+    def Valid_pair(self, list1, list2):
+        l = [] # list of children of a node
+        L = [] # pairs we return
+        
+        eps = math.abs(list1[0].distance - list2[0].distance)
+        for node in list1:
+            d= node.distance - 2* eps
+            List = self.allnode(d)
+            if len(List) !=0:
+                function = 2*eps
+            else:
+                minlist = Mylist(self.list_of_functions1)
+                function = 2*eps - math.abs(minlist.nearest_lower(d)-d)
+           
+            for s in node.findc(function):
+                l.append(s)
+        
+
+       
+#    for a given d returns all the nodes with this distance or function       
+    def allnode(self, d):
+        nodes = []
+        for pre, fill, node in RenderTree(self.root):
+            if node.distance == d :
+                nodes.append(node)
+        return nodes    
+            
+            
+        
 class MyNode2(Tree, NodeMixin):
     
     def __init__(self, name, x, y, distance=None, parent=None, children=None):
@@ -213,7 +269,15 @@ class MyNode2(Tree, NodeMixin):
     def height(self):
         return math.abs(self.distance-self.parent.distance)
 
-
+# for a given node it finds the children of the node which are 2epsilon lower 
+    def findc(self,f2eps):
+        c = []
+        for pre, fill, node in RenderTree(self):
+            if node.distance >= f2eps :
+                c.append(node)
+                
+        return c
+            
             
     
 if __name__ == "__main__":
