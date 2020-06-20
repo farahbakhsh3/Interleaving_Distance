@@ -34,8 +34,6 @@ class Mylist(list):
 #        return x
 
 class Tree():  # Just an example of a base class
-
-    def __init__(self, root = None, list_of_function1 =list()):
         
         
     def make_tree(self, csv_file):
@@ -55,6 +53,7 @@ class Tree():  # Just an example of a base class
                     x = MyNode2(node_no, x, y, parent=parent, distance=distance)
                 pbar.update(1)
         self.root = root
+        self.list_of_function1 = []
 
     def simplify_tree(self):
         self.remove_single(self.root.children[0])
@@ -78,15 +77,14 @@ class Tree():  # Just an example of a base class
         list_of_functions1 = []
         list_of_functions2 = []
         
-        
         for pre, fill, node in RenderTree(self.root):
             self.list_of_function1.append((node.distance))
         for pre, fill, node in RenderTree(tree2.root):
             self.list_of_function1.append((node.distance)+epsilon)
         self.list_of_function1.sort(reverse=True) # from bigest(0) to smalest
         for d in self.list_of_function1:
-            if d not in self.list_of_functions1:
-                self.list_of_functions1.append(d)
+            if d not in self.list_of_function1:
+                self.list_of_function1.append(d)
         list_of_function2 = []
         for pre, fill, node in RenderTree(tree2.root):
             list_of_function2.append((node.distance))
@@ -100,7 +98,7 @@ class Tree():  # Just an example of a base class
         nodes=[]
         nodes2=[]
         nodes = list(self.root.children) 
-        l = Mylist(self.list_of_functions1) 
+        l = Mylist(self.list_of_function1) 
         while nodes:
             n = nodes[0]
             li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
@@ -144,7 +142,7 @@ class Tree():  # Just an example of a base class
         List_nu = []
         nodelist1_new = []
         nodelist2_new = []
-        list_of_function = self.list_of_functions1.copy()
+        list_of_function = self.list_of_function1.copy()
         d = list_of_function[0]
         list_of_function.remove(d)
         for node in nodelisttree1: 
@@ -203,7 +201,7 @@ class Tree():  # Just an example of a base class
         L = [] # pairs we return
         FList = [] # lists of fathers
         function = list1[0].distance
-        eps = math.abs(function - list2[0].distance)
+        eps = abs(function - list2[0].distance)
         for node in list1:
             NF= node.upper2eps(eps)
             if NF not in FList:
@@ -280,7 +278,7 @@ class MyNode2(Tree, NodeMixin):
         f = self.parent
         d = self.distance
         x = self
-        while math.abs(f.distance - d) <= 2 * eps:
+        while abs(f.distance - d) <= 2 * eps:
             x = f
             f = f.parent
         
@@ -315,7 +313,7 @@ class MyNode2(Tree, NodeMixin):
         self.children = tuple(cl) 
         
     def height(self):
-        return math.abs(self.distance-self.parent.distance)
+        return abs(self.distance-self.parent.distance)
 
 
 
