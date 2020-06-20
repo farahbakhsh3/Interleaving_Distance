@@ -206,18 +206,13 @@ class Tree():  # Just an example of a base class
             NF= node.upper2eps(eps)
             if NF not in FList:
                 FList.append(NF)
-#         we earn a list of parent which is unique FList
+#      we earn a list of parent which is unique FList
         for node in FList: 
             l.clear()
             for n in node.findc(function):
                 l.append(n)
             # we have a list of tau of children with same parent l
-            AP = self.allpair(l,list2)
-            
-            for s in AP:
-                L.append(s)
-          
-        return L
+        return self.allpair(l,list2)
         
                 
 #    for a given pair of lists gives all partition of list1 and list2
