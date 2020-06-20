@@ -35,7 +35,9 @@ class Mylist(list):
 
 class Tree():  # Just an example of a base class
 
-    
+    def __init__(self, root = None, list_of_function1 =list()):
+        
+        
     def make_tree(self, csv_file):
         df = pd.read_csv(csv_file)
         self.nodes_count = len(df.index)
@@ -76,7 +78,7 @@ class Tree():  # Just an example of a base class
         list_of_functions1 = []
         list_of_functions2 = []
         
-        self.list_of_function1 = []
+        
         for pre, fill, node in RenderTree(self.root):
             self.list_of_function1.append((node.distance))
         for pre, fill, node in RenderTree(tree2.root):
