@@ -118,9 +118,7 @@ class Tree():  # Just an example of a base class
             nodes2.remove(n)
             for node in n.children:
                 nodes2.append(node)
-                
-        
-    
+                    
      
         
     
@@ -144,7 +142,7 @@ class Tree():  # Just an example of a base class
         List_nu = []
         nodelist1_new = []
         nodelist2_new = []
-        list_of_function = list_of_functions1.copy()
+        list_of_function = self.list_of_functions1.copy()
         d = list_of_function[0]
         list_of_function.remove(d)
         for node in nodelisttree1: 
@@ -184,39 +182,80 @@ class Tree():  # Just an example of a base class
         for d in list_of_function:
             list1 = self.allnode(d)
             list2 = tree2.allnode(d+epsilon)
-            List_gh = List_nu 
+            List_gh = List_nu #!!! avaz kon faghat esma ro beza
             List_nu = []
             
             for pair in self.Valid_pair(list1,list2):
                 yes = True
-                for p in partition_of_children(pair):
+                for p in self.partition_of_children(pair):
                     if p not in List_gh:
                         yes = False
                 if yes:
                     List_nu.append(pair)
         return dis
+    
 
-
-#    for any list of nodes in tree1 and nodes in tree2 returns all the valid pairs
+#       for any list of nodes in tree1 and nodes in tree2 returns all the valid pairs
     def Valid_pair(self, list1, list2):
         l = [] # list of children of a node
         L = [] # pairs we return
-        
-        eps = math.abs(list1[0].distance - list2[0].distance)
+        FList = [] # lists of fathers
+        function = list1[0].distance
+        eps = math.abs(function - list2[0].distance)
         for node in list1:
-            d= node.distance - 2* eps
-            List = self.allnode(d)
-            if len(List) !=0:
-                function = 2*eps
-            else:
-                minlist = Mylist(self.list_of_functions1)
-                function = 2*eps - math.abs(minlist.nearest_lower(d)-d)
-           
-            for s in node.findc(function):
-                l.append(s)
+            NF= node.upper2eps(eps)
+            if NF not in FList:
+                FList.append(NF)
+#         we earn a list of parent which is unique FList
+        for node in FList: 
+            l.clear()
+            for n in node.findc(function):
+                l.append(n)
+            # we have a list of tau of children with same parent l
+            AP = self.allpair(l,list2)
+            
+            for s in AP:
+                L.append(s)
+          
+        return L
         
-
-       
+                
+#    for a given pair of lists gives all partition of list1 and list2
+    def allpair(self, list1, list2):   
+        L = []
+        AS = self.all_subset(list1)
+        for node2 in list2:
+            for pair in AS:
+                pair.append(node2)
+                L.append(pair)
+                
+        return L
+                
+         
+        
+#     Was coppied from https://stackoverflow.com/questions/19368375/set-partitions-in-python
+    def partition(self, collection):
+        if len(collection) == 1:
+            yield [ collection ]
+            return
+    
+        first = collection[0]
+        for smaller in self.partition(collection[1:]):
+            # insert `first` in each of the subpartition's subsets
+            for n, subset in enumerate(smaller):
+                yield smaller[:n] + [[ first ] + subset]  + smaller[n+1:]
+            # put `first` in its own subset 
+            yield [ [ first ] ] + smaller
+#    L for [1,2,3]
+# [[1, 2, 3], [1], [2, 3], [1, 2], [3], [2], [1, 3]]
+    def all_subset (self, collection):
+        L = []
+        for s in self.partition(collection):
+            for l in s:
+                if l not in L:
+                    L.append(l)
+        return L
+        
 #    for a given d returns all the nodes with this distance or function       
     def allnode(self, d):
         nodes = []
@@ -238,7 +277,19 @@ class MyNode2(Tree, NodeMixin):
         self.parent = parent
         if children:
             self.children = children
-            
+     
+#        finds the father which is in 2 eps higher 
+    def upper2eps(self, eps):
+        f = self.parent
+        d = self.distance
+        x = self
+        while math.abs(f.distance - d) <= 2 * eps:
+            x = f
+            f = f.parent
+        
+        return x
+    
+        
     def make_long(self,list_of_distance):
 #        list_of_distance.sort() # sort from smallest to bigest we think it has been sorted
         if len(list_of_distance) > 0:
@@ -268,6 +319,10 @@ class MyNode2(Tree, NodeMixin):
         
     def height(self):
         return math.abs(self.distance-self.parent.distance)
+
+
+
+
 
 # for a given node it finds the children of the node which are 2epsilon lower 
     def findc(self,f2eps):
