@@ -80,16 +80,16 @@ class Tree():  # Just an example of a base class
         for pre, fill, node in RenderTree(self.root):
             self.list_of_function1.append((node.distance))
         for pre, fill, node in RenderTree(tree2.root):
-            self.list_of_function1.append((node.distance)+epsilon)
+            self.list_of_function1.append((node.distance)-epsilon)
         self.list_of_function1.sort(reverse=True) # from bigest(0) to smalest
         for d in self.list_of_function1:
-            if d not in self.list_of_function1:
-                self.list_of_function1.append(d)
+            if d not in list_of_functions1:
+                list_of_functions1.append(d)
         list_of_function2 = []
         for pre, fill, node in RenderTree(tree2.root):
             list_of_function2.append((node.distance))
         for pre, fill, node in RenderTree(self.root):
-            list_of_function2.append((node.distance)-epsilon)
+            list_of_function2.append((node.distance)+epsilon)
         list_of_function2.sort(reverse=True) # from bigest(0) to smalest
 
         for d in list_of_function2:
@@ -118,8 +118,6 @@ class Tree():  # Just an example of a base class
             nodes2.remove(n)
             for node in n.children:
                 nodes2.append(node)
-                    
-     
         
     
     def interleaving_distance(self, tree2, epsilon):
@@ -140,65 +138,85 @@ class Tree():  # Just an example of a base class
         # first line
         List_gh = [] 
         List_nu = []
-        nodelist1_new = []
-        nodelist2_new = []
+        
         list_of_function = self.list_of_function1.copy()
-        d = list_of_function[0]
-        list_of_function.remove(d)
-        for node in nodelisttree1: 
-            if node.distance == d:
-                nodelist1_new.append(node)
-                nodelisttree1.remove(node)
-        for node in nodelisttree2: 
-            if node.distance == d + epsilon:
-                nodelist2_new.append(node)
-                nodelisttree2.remove(node)
-        
-#       no of children of the first line
-        ch1= []
-        for n in nodelist1_new:
-            for ni in n.children:
-                ch1.append(ni)
-#      no of children of the second line
-        ch2 = []
-        for n in nodelist2_new:
-            for ni in n.children:
-                ch2.append(ni)
-        
-        if len(ch2)==0:
-            if len(ch1)!=0:
-                dis = False
-        else:
-            for n in ch2:
-                if n.height() > 2*epsilon:
-                    dis = False
-                    
-#        lists of validpairs
-        dp = d + 2*epsilon
-        if  dp in list_of_function:
-             List_nu = self.validpc(self.allnode(dp))
-        
-#        other lines
-        for d in list_of_function:
-            list1 = self.allnode(d)
-            list2 = tree2.allnode(d+epsilon)
-            List_gh = List_nu #!!! avaz kon faghat esma ro beza
-            List_nu = []
+        list_of_function.sort()
+        while(len(List_gh)==0 and dis ==True):
+            nodelist1_new = []
+            nodelist2_new = []
+            d = list_of_function[0]
+            list_of_function.remove(d)
             
-            for pair in self.Valid_pair(list1,list2):
-                yes = True
-                for p in self.partition_of_children(pair):
-                    if p not in List_gh:
-                        yes = False
-                if yes:
-                    List_nu.append(pair)
+            for node in nodelisttree1: 
+                if node.distance == d:
+                    nodelist1_new.append(node)
+                    nodelisttree1.remove(node)
+            for node in nodelisttree2: 
+                if node.distance == d + epsilon:
+                    nodelist2_new.append(node)
+                    nodelisttree2.remove(node)
+            
+    #       no of children of the first line
+            ch1= []
+            for n in nodelist1_new:
+                for ni in n.children:
+                    if ni not in ch1:
+                        ch1.append(ni)
+    #      no of children of the second line
+            ch2 = []
+            for n in nodelist2_new:
+                for ni in n.children:
+                    if ni not in ch2:
+                        ch2.append(ni)
+                  
+#            print(d)
+#            print(len(ch1))
+#            print(len(ch2))
+            if len(ch2)==0:
+                if len(ch1)!=0:
+                    dis = False
+            else:
+                for n in nodelist2_new:
+#                    print(n.height())
+                    if n.height() > 2*epsilon:
+                        dis = False
+             
+            if dis == True:
+                if len(nodelist1_new)>0:
+#                    print(len(nodelist1_new))
+#                    print(len(nodelist2_new))
+                    List_gh = self.Valid_pair(nodelist1_new, nodelist2_new)
+        
+        
+        
+        
+        if dis == True:
+#        lists of validpairs
+           
+#        other lines
+            for d in list_of_function:
+                print(d)
+                nodelist1_new = self.allnode(d)
+                nodelist2_new = tree2.allnode(d+epsilon)
+                List_gh = List_nu #!!! avaz kon faghat esma ro beza
+                List_nu = []
+                
+                for pair in self.Valid_pair(list1,list2):
+                    yes = True
+                    for p in self.partition_of_children(pair):
+                        if p not in List_gh:
+                            yes = False
+                    if yes:
+                        List_nu.append(pair)
+                        
+                        
         return dis
     
 
 #       for any list of nodes in tree1 and nodes in tree2 returns all the valid pairs
     def Valid_pair(self, list1, list2):
         l = [] # list of children of a node
-        L = [] # pairs we return
+       
         FList = [] # lists of fathers
         function = list1[0].distance
         eps = abs(function - list2[0].distance)
@@ -313,7 +331,11 @@ class MyNode2(Tree, NodeMixin):
         self.children = tuple(cl) 
         
     def height(self):
-        return abs(self.distance-self.parent.distance)
+        dis = 100
+        for pre, fill, node in RenderTree(self):
+            if node.distance < dis:
+                dis = node.distance
+        return abs(self.distance-dis)
 
 
 
@@ -347,7 +369,7 @@ if __name__ == "__main__":
     
     print("Simplified trees were made")
     
-    print(tree2.interleaving_distance(tree1,1))
+    print(tree1.interleaving_distance(tree1,1))
 #    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
 #    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
     
