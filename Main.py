@@ -199,44 +199,45 @@ class Tree():  # Just an example of a base class
             
             
 #        other lines
-#            for d in list_of_function:
-            d= list_of_function[0]
             
-            print(d)
-            nodelist1_new = self.allnode(d)
-            nodelist2_new = tree2.allnode(d+epsilon)
-        
+            while len(list_of_function) >0 and dis ==True:
+                d= list_of_function[0]
+                list_of_function.remove(d)
+                
+                print(d)
+                nodelist1_new = self.allnode(d)
+                nodelist2_new = tree2.allnode(d+epsilon)
             
-            # list ghadimi is written based on the node name
-            List_gh.clear()
-            for i in List_nu:
-                s = []
-                for j in i:
-                    s.append[j.name]
-                List_gh.append(s)
-            
-            
-            
-            
-            
-            List_nu.clear()
-#           now we need to fill List_nu
-            
-            
-            print(self.Valid_pair(nodelist1_new, nodelist2_new))
-            
-#            for pair in self.Valid_pair(nodelist1_new, nodelist2_new):
-#                
-#                yes = False
-#                for p in self.partition_of_children(pair):
-#                    if p in List_gh:
-#                        yes = True
-#                        dis = True
-#                        List_nu.append(pair)
-#                    
-#            if yes:
-#                dis = True
-#            
+                
+                # list ghadimi is written based on the node name
+                List_gh.clear()
+                for i in List_nu:
+                    s = []
+                    for j in i:
+                        s.append[j.name]
+                    List_gh.append(s)
+                
+                
+                
+                
+                
+                List_nu.clear()
+#               now we need to fill List_nu
+                
+                
+                print(self.Valid_pair(nodelist1_new, nodelist2_new))
+                yes = False
+                
+                for pair in self.Valid_pair(nodelist1_new, nodelist2_new):
+                    for p in self.partition_of_children(pair):
+                        if p in List_gh:
+                            yes = True
+                            List_nu.append(pair)
+                        
+                if yes:
+                    dis = True
+
+ 
                         
         return dis
     
@@ -394,11 +395,11 @@ if __name__ == "__main__":
     tree2.simplify_tree()
     DotExporter(tree2.root).to_picture("tree2_root.png")
     
-    
-    print("Simplified trees were made")
-    
-    print(tree1.interleaving_distance(tree1,1))
-#    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
+#    
+#    print("Simplified trees were made")
+#    
+#    print(tree1.interleaving_distance(tree1,1))
+##    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
 #    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
     
     
