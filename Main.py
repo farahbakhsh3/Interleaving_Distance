@@ -126,7 +126,7 @@ class Tree():  # Just an example of a base class
         nodelisttree1 = []
         nodelisttree2 = []
         self.augmented_tree(tree2, epsilon)
-#         first we put all the nodes in a list to be able to delet them easily
+#       first we put all the nodes in a list to be able to delet them easily
         
         print("Augmented trees were made")
         
@@ -135,7 +135,7 @@ class Tree():  # Just an example of a base class
         for pre, fill, node in RenderTree(tree2.root):
             nodelisttree2.append(node) 
         
-        # first line
+#       first line
         List_gh = [] 
         List_nu = []
         
@@ -156,13 +156,13 @@ class Tree():  # Just an example of a base class
                     nodelist2_new.append(node)
                     nodelisttree2.remove(node)
             
-    #       no of children of the first line
+#           no of children of the first line
             ch1= []
             for n in nodelist1_new:
                 for ni in n.children:
                     if ni not in ch1:
                         ch1.append(ni)
-    #      no of children of the second line
+#           no of children of the second line
             ch2 = []
             for n in nodelist2_new:
                 for ni in n.children:
@@ -191,14 +191,10 @@ class Tree():  # Just an example of a base class
         List_nu =List_gh
         
         if dis == True:
-#        lists of validpairs
+#       lists of validpairs
           
             
-            
-            
-            
-            
-#        other lines
+#       other lines
             
             while len(list_of_function) >0 and dis ==True:
                 d= list_of_function[0]
@@ -209,17 +205,13 @@ class Tree():  # Just an example of a base class
                 nodelist2_new = tree2.allnode(d+epsilon)
             
                 
-                # list ghadimi is written based on the node name
+#               list ghadimi is written based on the node name
                 List_gh.clear()
                 for i in List_nu:
                     s = []
                     for j in i:
                         s.append[j.name]
                     List_gh.append(s)
-                
-                
-                
-                
                 
                 List_nu.clear()
 #               now we need to fill List_nu
@@ -236,14 +228,36 @@ class Tree():  # Just an example of a base class
                         
                 if yes:
                     dis = True
-
- 
-                        
+                    
+                    
         return dis
     
+    
+#       now we have a list of children of list1 and children of list2.
+        
+ 
+    def all_subset(self, integ, collection2):
+        i = 0
+        s_gh = []
+        s_j=[]
+        for j in collection2:
+            s_j.append([j])
+        for i in range(1, integ):
+            s_gh = s_j.copy() 
+            s_j.clear()
+            for j in range(0,len(s_gh)):
+                for s in collection2:
+                    k = s_gh[j]+[s]
+                    s_j.append(k)
+                    
+        return s_j
+       
+        
+
+                
 
 #       for any list of nodes in tree1 and nodes in tree2 returns all the valid pairs
-    def Valid_pair(self, list1, list2):
+    def Valid_pair(self,list1, list2):
         l = [] # list of children of a node
        
         FList = [] # lists of fathers
@@ -395,11 +409,11 @@ if __name__ == "__main__":
     tree2.simplify_tree()
     DotExporter(tree2.root).to_picture("tree2_root.png")
     
-#    
-#    print("Simplified trees were made")
-#    
-#    print(tree1.interleaving_distance(tree1,1))
-##    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
-#    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
+    
+    print("Simplified trees were made")
+    
+    print(tree1.interleaving_distance(tree1,1))
+#    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
+    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
     
     
