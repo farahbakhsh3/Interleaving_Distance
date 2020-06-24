@@ -126,8 +126,7 @@ class Tree():  # Just an example of a base class
         nodelisttree1 = []
         nodelisttree2 = []
         self.augmented_tree(tree2, epsilon)
-#       first we put all the nodes in a list to be able to delet them easily
-        
+#       first we put all the nodes in a list to be able to delet them easily and reduce the run time
         print("Augmented trees were made")
         
         for pre, fill, node in RenderTree(self.root):
@@ -135,18 +134,24 @@ class Tree():  # Just an example of a base class
         for pre, fill, node in RenderTree(tree2.root):
             nodelisttree2.append(node) 
         
+#       we copy list of function to be able to delete easily 
+        list_of_function = self.list_of_function1.copy()
+        list_of_function.sort()
+        
+        
 #       first line
         List_gh = [] 
         List_nu = []
         
-        list_of_function = self.list_of_function1.copy()
-        list_of_function.sort()
-        while(len(List_gh)==0 and dis ==True):
+        
+        while(len(List_gh)==0 and dis ==True): # the goal of this while is to go to other lines easily if we have nothing yet to calculate when we start from bottom
             nodelist1_new = []
             nodelist2_new = []
             d = list_of_function[0]
             list_of_function.remove(d)
             
+            
+            # remove nodes we consider in the first stage or line
             for node in nodelisttree1: 
                 if node.distance == d:
                     nodelist1_new.append(node)
@@ -169,74 +174,69 @@ class Tree():  # Just an example of a base class
                     if ni not in ch2:
                         ch2.append(ni)
                   
-#            print(d)
-#            print(len(ch1))
-#            print(len(ch2))
-            if len(ch2)==0:
-                if len(ch1)!=0:
+
+            if len(nodelist2_new)==0:
+                if len(nodelist1_new)!=0:
                     dis = False
-            else:
-                for n in nodelist2_new:
-#                    print(n.height())
-                    if n.height() > 2*epsilon:
-                        dis = False
+                else:
+                    for n in nodelist2_new:
+                        if n.height() > 2*epsilon:
+                            dis = False
              
             if dis == True:
                 if len(nodelist1_new)>0:
-#                    print(len(nodelist1_new))
-#                    print(len(nodelist2_new))
                     List_gh = self.Valid_pair(nodelist1_new, nodelist2_new)
         
                 
         List_nu =List_gh
         
-        if dis == True:
+        #if dis == True:
 #       lists of validpairs
           
             
-#       other lines
-            
-            while len(list_of_function) >0 and dis ==True:
-                d= list_of_function[0]
-                list_of_function.remove(d)
-                
-                print(d)
-                nodelist1_new = self.allnode(d)
-                nodelist2_new = tree2.allnode(d+epsilon)
-            
-                
-#               list ghadimi is written based on the node name
-                List_gh.clear()
-                for i in List_nu:
-                    s = []
-                    for j in i:
-                        s.append[j.name]
-                    List_gh.append(s)
-                
-                List_nu.clear()
-#               now we need to fill List_nu
-                
-                
-                print(self.Valid_pair(nodelist1_new, nodelist2_new))
-                yes = False
-                
-                for pair in self.Valid_pair(nodelist1_new, nodelist2_new):
-                    for p in self.partition_of_children(pair):
-                        if p in List_gh:
-                            yes = True
-                            List_nu.append(pair)
-                        
-                if yes:
-                    dis = True
-                    
+##       other lines
+#            
+#            while len(list_of_function) >0 and dis ==True:
+#                d = list_of_function[0]
+#                list_of_function.remove(d)
+#                
+#                print(d)
+#                nodelist1_new = self.allnode(d)
+#                nodelist2_new = tree2.allnode(d+epsilon)
+#            
+#                
+##               list ghadimi is written based on the node name
+#                List_gh.clear()
+#                for i in List_nu:
+#                    s = []
+#                    for j in i:
+#                        s.append[j.name]
+#                    List_gh.append(s)
+#                
+#                List_nu.clear()
+##               now we need to fill List_nu
+#                
+#                
+#                print(self.Valid_pair(nodelist1_new, nodelist2_new))
+#                yes = False
+#                
+#                for pair in self.Valid_pair(nodelist1_new, nodelist2_new):
+#                    for p in self.partition_of_children(pair):
+#                        if p in List_gh:
+#                            yes = True
+#                            List_nu.append(pair)
+#                        
+#                if yes:
+#                    dis = True
+#                    
                     
         return dis
     
     
 #       now we have a list of children of list1 and children of list2.
         
- 
-    def all_subset(self, integ, collection2):
+#   print(all_subset(2,[1,2,3]))   [[1, 1], [1, 2], [1, 3], [2, 1], [2, 2], [2, 3], [3, 1], [3, 2], [3, 3]]
+    def partition(self, integ, collection2):
         i = 0
         s_gh = []
         s_j=[]
@@ -290,13 +290,13 @@ class Tree():  # Just an example of a base class
          
         
 #     Was coppied from https://stackoverflow.com/questions/19368375/set-partitions-in-python
-    def partition(self, collection):
+    def partition_help(self, collection):
         if len(collection) == 1:
             yield [ collection ]
             return
     
         first = collection[0]
-        for smaller in self.partition(collection[1:]):
+        for smaller in self.partition_help(collection[1:]):
             # insert `first` in each of the subpartition's subsets
             for n, subset in enumerate(smaller):
                 yield smaller[:n] + [[ first ] + subset]  + smaller[n+1:]
@@ -414,6 +414,6 @@ if __name__ == "__main__":
     
     print(tree1.interleaving_distance(tree1,1))
 #    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
-    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
+#    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
     
     
