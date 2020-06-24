@@ -306,7 +306,7 @@ class Tree():  # Just an example of a base class
 # [[1, 2, 3], [1], [2, 3], [1, 2], [3], [2], [1, 3]]
     def all_subset (self, collection):
         L = []
-        for s in self.partition(collection):
+        for s in self.partition_help(collection):
             for l in s:
                 if l not in L:
                     L.append(l)
