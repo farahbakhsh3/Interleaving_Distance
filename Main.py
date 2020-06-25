@@ -221,9 +221,9 @@ class Tree():  # Just an example of a base class
        
         
 #       for any list of nodes in tree1 and nodes in tree2 returns all the valid pairs
-    def Valid_pair(self,list1, list2):
+    def Valid_pair(self, list1, list2):
         l = [] # list of children of a node
-       
+        ret = []
         FList = [] # lists of fathers
         function = list1[0].distance
         eps = abs(function - list2[0].distance)
@@ -231,13 +231,19 @@ class Tree():  # Just an example of a base class
             NF= node.upper2eps(eps)
             if NF not in FList:
                 FList.append(NF)
-#      we earn a list of parent which is unique FList
+        
+#       we earn a list of parent which is unique FList
         for node in FList: 
             l.clear()
             for n in node.findc(function):
                 l.append(n)
+                
+            print(l)   
+            for pair in self.allpair(l,list2):
+                ret.append(pair)   
+        
             # we have a list of tau of children with same parent l
-        return self.allpair(l,list2)
+        return ret
         
                 
 #    for a given pair of lists gives all partition of list1 and list2
@@ -349,10 +355,10 @@ class MyNode2(Tree, NodeMixin):
 
 
 # for a given node it finds the children of the node which are 2epsilon lower 
-    def findc(self,f2eps):
+    def findc(self, f2eps):
         c = []
         for pre, fill, node in RenderTree(self):
-            if node.distance >= f2eps :
+            if node.distance == f2eps :
                 c.append(node)
                 
         return c
