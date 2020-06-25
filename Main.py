@@ -354,7 +354,7 @@ class MyNode2(Tree, NodeMixin):
 
 
 
-# for a given node it finds the children of the node which are 2epsilon lower 
+# for a given node it finds the children of the node which are 2epsilon lowerand their distances are f2eps
     def findc(self, f2eps):
         c = []
         for pre, fill, node in RenderTree(self):
