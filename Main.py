@@ -145,11 +145,12 @@ class Tree():  # Just an example of a base class
         
         
         while(len(List_gh)==0 and dis ==True): # the goal of this while is to go to other lines easily if we have nothing yet to calculate when we start from bottom
+            
             nodelist1_new = []
             nodelist2_new = []
             d = list_of_function[0]
             list_of_function.remove(d)
-            
+            print(d)
             
             # remove nodes we consider in the first stage or line
             for node in nodelisttree1: 
@@ -176,65 +177,32 @@ class Tree():  # Just an example of a base class
                   
 
             if len(nodelist2_new)==0:
-                if len(nodelist1_new)!=0:
+                if len(nodelist1_new)!=0: # we do not need this if
                     dis = False
-                else:
-                    for n in nodelist2_new:
-                        if n.height() > 2*epsilon:
-                            dis = False
-             
-            if dis == True:
-                if len(nodelist1_new)>0:
-                    List_gh = self.Valid_pair(nodelist1_new, nodelist2_new)
-        
+            else:
+                if len(nodelist1_new)!=0:
+                    vp=self.Valid_pair(nodelist1_new, nodelist2_new)
+                    
                 
-        List_nu =List_gh
-        
-        #if dis == True:
-#       lists of validpairs
-          
-            
-##       other lines
-#            
-#            while len(list_of_function) >0 and dis ==True:
-#                d = list_of_function[0]
-#                list_of_function.remove(d)
-#                
-#                print(d)
-#                nodelist1_new = self.allnode(d)
-#                nodelist2_new = tree2.allnode(d+epsilon)
-#            
-#                
-##               list ghadimi is written based on the node name
-#                List_gh.clear()
-#                for i in List_nu:
-#                    s = []
-#                    for j in i:
-#                        s.append[j.name]
-#                    List_gh.append(s)
-#                
-#                List_nu.clear()
-##               now we need to fill List_nu
-#                
-#                
-#                print(self.Valid_pair(nodelist1_new, nodelist2_new))
-#                yes = False
-#                
-#                for pair in self.Valid_pair(nodelist1_new, nodelist2_new):
-#                    for p in self.partition_of_children(pair):
-#                        if p in List_gh:
-#                            yes = True
-#                            List_nu.append(pair)
-#                        
-#                if yes:
-#                    dis = True
-#                    
+                    
+             
+#        if dis == True:
+#            if len(nodelist1_new)>0:
+#                List_gh = self.Valid_pair(nodelist1_new, nodelist2_new)
+#                print(List_gh)
+
                     
         return dis
     
     
+#    else:
+#                for n in nodelist2_new:
+#                    if n.height() > 2*epsilon:
+#                        dis = False
+    
 #       now we have a list of children of list1 and children of list2.
-        
+   
+# should be gone to another page      
 #   print(all_subset(2,[1,2,3]))   [[1, 1], [1, 2], [1, 3], [2, 1], [2, 2], [2, 3], [3, 1], [3, 2], [3, 3]]
     def partition(self, integ, collection2):
         i = 0
@@ -249,13 +217,9 @@ class Tree():  # Just an example of a base class
                 for s in collection2:
                     k = s_gh[j]+[s]
                     s_j.append(k)
-                    
         return s_j
        
         
-
-                
-
 #       for any list of nodes in tree1 and nodes in tree2 returns all the valid pairs
     def Valid_pair(self,list1, list2):
         l = [] # list of children of a node
