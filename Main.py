@@ -75,7 +75,6 @@ class Tree():  # Just an example of a base class
 
     def augmented_tree(self, tree2, epsilon):
         list_of_functions1 = []
-        list_of_functions2 = []
         
         for pre, fill, node in RenderTree(self.root):
             if node.distance not in list_of_functions1:
@@ -96,14 +95,13 @@ class Tree():  # Just an example of a base class
             n = nodes[0]
             li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
             if len(li)>0:
-                print(li)
                 n.make_long(li)
             nodes.remove(n)
             for node in n.children:
                 nodes.append(node)
         
         nodes2 = list(tree2.root.children) 
-        l2 = Mylist(list_of_functions2) 
+        l2 = Mylist(list_of_functions1) 
         while nodes2:
             n = nodes2[0]
             li2 = l2.numbers_bet_two_distance(n.distance, n.parent.distance)
@@ -120,6 +118,7 @@ class Tree():  # Just an example of a base class
         nodelisttree1 = []
         nodelisttree2 = []
         self.augmented_tree(tree2, epsilon)
+        
 #       first we put all the nodes in a list to be able to delet them easily and reduce the run time
         print("Augmented trees were made")
         
@@ -386,8 +385,9 @@ if __name__ == "__main__":
     
     print("Simplified trees were made")
     
-    print(tree1.interleaving_distance(tree1,1))
-#    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
-#    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
+    print(tree1.interleaving_distance(tree2,1))
+#    print(tree1.interleaving_distance(tree1,-11))
+    DotExporter(tree2.root).to_picture("tree2_root_aug.png")
+    DotExporter(tree1.root).to_picture("tree1_root_aug.png")
     
     
