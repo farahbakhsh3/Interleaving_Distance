@@ -78,23 +78,16 @@ class Tree():  # Just an example of a base class
         list_of_functions2 = []
         
         for pre, fill, node in RenderTree(self.root):
-            self.list_of_function1.append((node.distance))
+            if node.distance not in list_of_functions1:
+                list_of_functions1.append((node.distance))
+                self.list_of_function1.append(node.distance)
         for pre, fill, node in RenderTree(tree2.root):
-            self.list_of_function1.append((node.distance)-epsilon)
+            if node.distance not in list_of_functions1:
+                list_of_functions1.append((node.distance)-epsilon)
+                self.list_of_function1.append((node.distance)-epsilon)
         self.list_of_function1.sort(reverse=True) # from bigest(0) to smalest
-        for d in self.list_of_function1:
-            if d not in list_of_functions1:
-                list_of_functions1.append(d)
-        list_of_function2 = []
-        for pre, fill, node in RenderTree(tree2.root):
-            list_of_function2.append((node.distance))
-        for pre, fill, node in RenderTree(self.root):
-            list_of_function2.append((node.distance)+epsilon)
-        list_of_function2.sort(reverse=True) # from bigest(0) to smalest
-
-        for d in list_of_function2:
-            if d not in list_of_functions2:
-                list_of_functions2.append(d)
+        list_of_functions1.sort(reverse=True)
+        
         nodes=[]
         nodes2=[]
         nodes = list(self.root.children) 
@@ -103,6 +96,7 @@ class Tree():  # Just an example of a base class
             n = nodes[0]
             li = l.numbers_bet_two_distance(n.distance, n.parent.distance)
             if len(li)>0:
+                print(li)
                 n.make_long(li)
             nodes.remove(n)
             for node in n.children:
@@ -130,7 +124,7 @@ class Tree():  # Just an example of a base class
         print("Augmented trees were made")
         
         for pre, fill, node in RenderTree(self.root):
-            nodelisttree1.append(node)     
+            nodelisttree1.append(node)  
         for pre, fill, node in RenderTree(tree2.root):
             nodelisttree2.append(node) 
         
@@ -143,53 +137,63 @@ class Tree():  # Just an example of a base class
         List_gh = [] 
         List_nu = []
         
-        
-        while(len(List_gh)==0 and dis ==True): # the goal of this while is to go to other lines easily if we have nothing yet to calculate when we start from bottom
-            
-            nodelist1_new = []
-            nodelist2_new = []
-            d = list_of_function[0]
-            list_of_function.remove(d)
-            print(d)
-            
-            # remove nodes we consider in the first stage or line
-            for node in nodelisttree1: 
-                if node.distance == d:
-                    nodelist1_new.append(node)
-                    nodelisttree1.remove(node)
-            for node in nodelisttree2: 
-                if node.distance == d + epsilon:
-                    nodelist2_new.append(node)
-                    nodelisttree2.remove(node)
-            
-#           no of children of the first line
-            ch1= []
-            for n in nodelist1_new:
-                for ni in n.children:
-                    if ni not in ch1:
-                        ch1.append(ni)
-#           no of children of the second line
-            ch2 = []
-            for n in nodelist2_new:
-                for ni in n.children:
-                    if ni not in ch2:
-                        ch2.append(ni)
-                  
-
-            if len(nodelist2_new)==0:
-                if len(nodelist1_new)!=0: # we do not need this if
-                    dis = False
-            else:
-                if len(nodelist1_new)!=0:
-                    vp=self.Valid_pair(nodelist1_new, nodelist2_new)
-                    
-                
-                    
-             
-#        if dis == True:
-#            if len(nodelist1_new)>0:
-#                List_gh = self.Valid_pair(nodelist1_new, nodelist2_new)
-#                print(List_gh)
+#        i = 1
+#        while(len(List_gh)==0 and dis ==True and i<=4): # the goal of this while is to go to other lines easily if we have nothing yet to calculate when we start from bottom
+#            i= i+1
+#            nodelist1_new = []
+#            nodelist2_new = []
+#            d = list_of_function[0]
+#            list_of_function.remove(d)
+#            print(d)
+#            print(nodelist1_new)
+#            # remove nodes we consider in the first stage or line
+#            for node in nodelisttree1: 
+#                if node.distance == d:
+#                    print(nodelist1_new)
+#                    print(node.name, node.distance)
+#                    nodelist1_new.append(node)
+#                    nodelisttree1.remove(node)
+#            for node in nodelisttree2: 
+#                if node.distance == d + epsilon:
+#                    nodelist2_new.append(node)
+#                    nodelisttree2.remove(node)
+#            print("node1")
+#            for p in nodelist1_new:
+#                print(p.name)
+##           no of children of the first line
+#            ch1= []
+#            for n in nodelist1_new:
+#                for ni in n.children:
+#                    if ni not in ch1:
+#                        ch1.append(ni)
+##           no of children of the second line
+#            ch2 = []
+#            for n in nodelist2_new:
+#                for ni in n.children:
+#                    if ni not in ch2:
+#                        ch2.append(ni)
+#                  
+#
+#            if len(nodelist2_new)==0:
+#                if len(nodelist1_new)!=0: # we do not need this if
+#                    dis = False
+#            else:
+#                if len(nodelist1_new)!=0:
+#                    vp=self.Valid_pair(nodelist1_new, nodelist2_new)
+##                    print(vp)
+#                    print("node1")
+#                    for p in nodelist1_new:
+#                        print(p.name)
+#                    print("node2")
+#                    for p in nodelist2_new:
+#                        print(p.name)
+#                print("=f")
+#                    
+#             
+##        if dis == True:
+##            if len(nodelist1_new)>0:
+##                List_gh = self.Valid_pair(nodelist1_new, nodelist2_new)
+##                print(List_gh)
 
                     
         return dis
@@ -238,7 +242,7 @@ class Tree():  # Just an example of a base class
             for n in node.findc(function):
                 l.append(n)
                 
-            print(l)   
+#            print(l)   
             for pair in self.allpair(l,list2):
                 ret.append(pair)   
         
@@ -254,7 +258,6 @@ class Tree():  # Just an example of a base class
             for pair in AS:
                 pair.append(node2)
                 L.append(pair)
-                
         return L
                 
          
@@ -359,7 +362,8 @@ class MyNode2(Tree, NodeMixin):
         c = []
         for pre, fill, node in RenderTree(self):
             if node.distance == f2eps :
-                c.append(node)
+                if node not in c:
+                    c.append(node)
                 
         return c
             
